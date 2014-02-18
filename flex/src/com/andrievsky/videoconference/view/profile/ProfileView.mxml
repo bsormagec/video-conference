@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		 xmlns:s="library://ns.adobe.com/flex/spark" 
+		 xmlns:mx="library://ns.adobe.com/flex/mx" width="400" height="25" >
+	<fx:Script>
+		<![CDATA[
+			public static const LOGOUT:String = "ProfileView.LOGOUT";
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:Label id="userName" left="0" right="80" top="4" fontSize="18" text="Name" textAlign="right"/>
+	<s:Button id="logout" y="0" right="0" label="Logout" click="dispatchEvent(new Event(LOGOUT));"/>
+</s:Group>

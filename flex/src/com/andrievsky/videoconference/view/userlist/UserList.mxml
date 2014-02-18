@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx"
+					  width="120" maxWidth="320" minWidth="120"
+					  height="450" minHeight="450" skinClass="com.andrievsky.videoconference.view.userlist.UserListSkin" xmlns:vo="com.andrievsky.videoconference.model.vo.*">
+	<fx:Declarations>
+		<vo:RoomVO id="room"/>
+	</fx:Declarations>
+	<s:List left="20" right="20" top="182" bottom="57" minWidth="80" borderVisible="false"
+			contentBackgroundAlpha="0" dataProvider="{room.users}" fontSize="14" horizontalScrollPolicy="off"
+			itemRenderer="com.andrievsky.videoconference.view.userlist.UserListItemRenderer"
+			labelField="userName">
+	</s:List>
+	<s:Rect left="20" right="20" top="31" height="24">
+		<s:fill>
+			<s:BitmapFill source="@Embed('assets/graphics/userlist-sсhadow.png')" />
+		</s:fill>
+	</s:Rect>
+	<s:Line left="20" right="20" top="55">
+		<s:stroke>
+			<s:SolidColorStroke weight="2" color="0x949494"/>
+		</s:stroke>
+	</s:Line>
+	<s:Rect left="20" right="20" top="136" height="24">
+		<s:fill>
+			<s:BitmapFill source="@Embed('assets/graphics/userlist-sсhadow.png')" />
+		</s:fill>
+	</s:Rect>
+	<s:Line left="20" right="20" top="160">
+		<s:stroke>
+			<s:SolidColorStroke weight="2" color="0x949494"/>
+		</s:stroke>
+	</s:Line>
+	<s:Rect top="557" bottom="49" width="338" horizontalCenter="0">
+		<s:fill>
+			<s:BitmapFill source="@Embed('assets/graphics/userlist-sсhadow.png')" />
+		</s:fill>
+	</s:Rect>
+	<s:Line left="21" right="21" bottom="38">
+		<s:stroke>
+			<s:SolidColorStroke weight="2" color="0x949494"/>
+		</s:stroke>
+	</s:Line>
+	<s:Label top="29" fontSize="14" horizontalCenter="0" text="TEACHER"/>
+	<s:Label id="casterName" left="20" right="20" top="75" fontSize="14" text="{room.roomName}"/>
+	<s:Label top="134" fontSize="14" horizontalCenter="0" text="STUDENTS LIST"/>
+	<s:Label left="24" bottom="6" height="21" fontSize="10" text="All students"/>
+</s:SkinnableContainer>

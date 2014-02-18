@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:HSlider xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		   xmlns:s="library://ns.adobe.com/flex/spark" 
+		   xmlns:mx="library://ns.adobe.com/flex/mx" skinClass="com.andrievsky.videoconference.view.common.volumeslider.VolumeSliderSkin" change="changeHandler(event)" creationComplete="changeHandler(null)"
+		   width="92">
+	
+	<fx:Script>
+		<![CDATA[
+			import spark.primitives.Rect;
+			protected function changeHandler(event:Event):void
+			{
+				indicator.width = this.value*this.width;
+			}
+			
+			/***
+			 * Skin parts
+			 */
+			[SkinPart(required="false")]
+			public var indicator:Rect;
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+</s:HSlider>

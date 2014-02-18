@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:chat="com.andrievsky.videoconference.view.common.chat.*" 
+					  width="100%" height="100%" skinClass="com.andrievsky.videoconference.view.common.chat.ChatViewSkin"
+					 >
+	<fx:Script>
+		<![CDATA[
+			import com.andrievsky.videoconference.event.RTMPServiceEvent;
+			
+			import mx.collections.ArrayCollection;
+			
+			[Bindable]
+			public var dataProvider:ArrayCollection;
+			
+			private function updateScroll(event:Event=null):void
+			{
+				messageRender.invalidateSize();
+				messageRender.verticalScrollPosition = messageRender.contentHeight;
+				//messageRender.verticalScrollPosition = messageRender.measuredHeight;//scroller.verticalScrollBar.maximum;
+			}
+			
+			public function sendMessage():void
+			{
+				if (isEmptyMessage(input.text)) return;
+				dispatchEvent(new RTMPServiceEvent(RTMPServiceEvent.ADD_MESSAGE, input.text));
+				input.text = "";
+				input.setFocus();
+			}
+			
+			private function isEmptyMessage(value:String):Boolean
+			{
+				for (var i:int=0; i<value.length;i++)
+				{
+					if (value.charCodeAt(i) != 32 && value.charCodeAt(i) != 10) return false;
+				}
+				return true;
+			}
+			
+			protected function enterHandler(event:KeyboardEvent):void 
+			{
+				switch(event.keyCode)
+				{
+					case Keyboard.ENTER:
+						input.text = input.text.slice( 0, -1 );
+						if (event.shiftKey)
+						{
+							input.appendText("\n");
+						}
+						else
+						{
+							event.preventDefault();
+							//stage.focus = null;
+							sendMessage();
+						}
+						break;
+				}
+				
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+		<s:Scroller width="100%" top="5" left="5" right="5" bottom="45"  id="scroller" minViewportInset="1" hasFocusableChildren="false">
+			<chat:ChatMessagesRender id="messageRender" updateScroll="updateScroll()" width="100%" height="100%" dataProvider="{dataProvider}" />
+		</s:Scroller>
+		<s:Group width="100%" height="40" minHeight="40" maxHeight="80" bottom="5">
+			<s:TextArea id="input" left="5" right="200" top="0" bottom="0" borderColor="#cccccc"
+						editable="true" keyDown="enterHandler(event)" textAlign="left"
+						verticalAlign="top"/>
+			<s:BitmapImage source="@Embed('assets/graphics/chat-filebutton.png')" right="150" top="5" />
+			<s:Button id="sendButton" right="5" top="0" label="Send" click="sendMessage()" skinClass="com.andrievsky.videoconference.view.common.skins.buttons.OrangeButtonSkin"/>
+		</s:Group>
+</s:SkinnableContainer>

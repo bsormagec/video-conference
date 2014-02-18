@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<s:SparkButtonSkin xmlns:fx="http://ns.adobe.com/mxml/2009" 
+                   xmlns:s="library://ns.adobe.com/flex/spark" 
+                   xmlns:fb="http://ns.adobe.com/flashbuilder/2009"
+                   minWidth="193" minHeight="44" width="193" height="44" 
+                   alpha.disabledStates="0.5">
+	<fx:Metadata>[HostComponent("spark.components.ButtonBarButton")]</fx:Metadata>
+    
+    <!-- states -->
+    <s:states>
+        <s:State name="up" />
+        <s:State name="over" stateGroups="overStates" />
+        <s:State name="down" stateGroups="downStates" />
+        <s:State name="disabled" stateGroups="disabledStates" />
+        <s:State name="upAndSelected" stateGroups="selectedStates, selectedUpStates" />
+        <s:State name="overAndSelected" stateGroups="overStates, selectedStates" />
+        <s:State name="downAndSelected" stateGroups="downStates, selectedStates" />
+        <s:State name="disabledAndSelected" stateGroups="selectedUpStates, disabledStates, selectedStates" />
+    </s:states>
+    
+	<s:BitmapImage excludeFrom="selectedStates" source="@Embed('assets/graphics/tabs-button-normal.png')" bottom="0" horizontalCenter="0" />
+	<s:BitmapImage includeIn="selectedStates" source="@Embed('assets/graphics/tabs-button-selected.png')" bottom="0" horizontalCenter="0" />
+    
+    <!-- layer 8: text -->
+    <!--- @copy spark.components.supportClasses.ButtonBase#labelDisplay -->
+    <s:Label id="labelDisplay" left="10" right="10" color="#FFFFFF" fontSize="24"
+			 horizontalCenter="0" maxDisplayedLines="1" textAlign="center" verticalAlign="middle"
+			 verticalCenter="7"
+			 color.selectedStates="#000000">
+    </s:Label>
+    
+</s:SparkButtonSkin>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<common:StreamView xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				   xmlns:s="library://ns.adobe.com/flex/spark" 
+				   xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:common="com.andrievsky.videoconference.view.common.*" width="100%" height="100%" xmlns:streamdisplay="com.andrievsky.videoconference.view.common.streamdisplay.*" xmlns:chat="com.andrievsky.videoconference.view.common.chat.*" xmlns:controls="com.andrievsky.videoconference.view.controls.*" xmlns:usersingle="com.andrievsky.videoconference.view.usersingle.*">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:Image id="leaveButton" source="assets/graphics/back-icon.png" left="2" top="2" width="10" height="10"/>
+	<mx:HDividedBox right="10" left="10" top="10" bottom="10" horizontalGap="10">
+		<s:Group width="80%" height="100%" minWidth="830">
+			<mx:VDividedBox width="100%" height="100%">
+				<s:Image scaleMode="stretch" width="100%" height="100%" minHeight="320" minWidth="240" source="assets/dummy/shared-screen.png"/>
+				<s:Group width="100%" minHeight="200">
+					<controls:ControlsView id="controls" width="100%" height="100%"/>
+				</s:Group>
+			</mx:VDividedBox>
+		</s:Group>
+		<s:Group width="20%" minWidth="140" maxWidth="320" height="100%">
+			<usersingle:UserSingle left="10" right="0" room="{room}" top="0"/>
+			<s:Group left="10" right="0" bottom="10">
+			<s:layout>
+				<s:VerticalLayout gap="15" />
+			</s:layout>
+				<streamdisplay:StreamDisplay width="100%" id="videoDisplayInput" skinClass="com.andrievsky.videoconference.view.common.streamdisplay.StreamDisplayInputMiniSkin" />
+				<streamdisplay:StreamDisplay width="100%" id="videoDisplayOutput" skinClass="com.andrievsky.videoconference.view.common.streamdisplay.StreamDisplayOutputMiniSkin" />
+			</s:Group>
+		</s:Group>
+	</mx:HDividedBox>
+</common:StreamView>

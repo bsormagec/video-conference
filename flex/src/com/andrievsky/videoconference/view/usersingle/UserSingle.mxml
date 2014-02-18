@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" skinClass="com.andrievsky.videoconference.view.usersingle.UserSingleSkin" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx" 
+					  width="120" maxWidth="320" minWidth="120"
+					  height="220" minHeight="220" xmlns:vo="com.andrievsky.videoconference.model.vo.*">
+	<fx:Declarations>
+		<vo:RoomVO id="room"/>
+	</fx:Declarations>
+	<s:Rect left="20" right="20" top="31" height="24">
+		<s:fill>
+			<s:BitmapFill source="@Embed('assets/graphics/userlist-sсhadow.png')" />
+		</s:fill>
+	</s:Rect>
+	<s:Line left="20" right="20" top="55">
+		<s:stroke>
+			<s:SolidColorStroke weight="2" color="0x949494"/>
+		</s:stroke>
+	</s:Line>
+	<s:Rect left="20" right="20" top="136" height="24">
+		<s:fill>
+			<s:BitmapFill source="@Embed('assets/graphics/userlist-sсhadow.png')" />
+		</s:fill>
+	</s:Rect>
+	<s:Line left="23" right="23" top="160">
+		<s:stroke>
+			<s:SolidColorStroke weight="2" color="0x949494"/>
+		</s:stroke>
+	</s:Line>
+	
+	<s:Label top="29" fontSize="14" horizontalCenter="0" text="TEACHER"/>
+	<s:Label id="casterName" left="20" top="75" fontSize="14" text="{room.roomName}" maxDisplayedLines="1" right="20"/>
+	<s:Label top="134" fontSize="14" horizontalCenter="0" text="STUDENT"/>
+	<s:Label id="userName" left="20" top="182" fontSize="14" text="{room.user.userName}" maxDisplayedLines="1" right="20" />
+</s:SkinnableContainer>

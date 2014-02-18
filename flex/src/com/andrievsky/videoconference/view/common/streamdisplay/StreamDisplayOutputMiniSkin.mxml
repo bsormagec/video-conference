@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Skin xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" 
+    xmlns:fb="http://ns.adobe.com/flashbuilder/2009" alpha.disabled="0.5" xmlns:volumeslider="com.andrievsky.skillstr.view.common.chat.volumeslider.*" xmlns:volumeslider1="com.andrievsky.videoconference.view.common.volumeslider.*"
+	minWidth="120" minHeight="290" width="350" height="290"
+	>
+	<fx:Metadata>[HostComponent("com.andrievsky.videoconference.view.common.streamdisplay.StreamDisplay")]</fx:Metadata>
+    
+    <s:states>
+        <s:State name="normal" />
+        <s:State name="disabled" />
+    </s:states>
+    <!--- @copy spark.components.SkinnableContainer#contentGroup -->
+    <s:Group id="contentGroup" left="3" right="3" top="3" bottom="26" minWidth="0" minHeight="0">
+        <s:layout>
+            <s:BasicLayout/>
+        </s:layout>
+    </s:Group>
+	<s:Rect id="background" left="0" right="0" top="0" bottom="24" topLeftRadiusX="5" topRightRadiusX="5">
+		<s:stroke>
+			<s:SolidColorStroke weight="3" color="0x191919"/>
+		</s:stroke>
+	</s:Rect>
+	<s:Rect height="25" bottom="0" left="0" right="0" bottomLeftRadiusX="5" bottomRightRadiusX="5">
+		<s:fill>
+			<s:SolidColor color="0x515152"/>
+		</s:fill>
+	</s:Rect>
+	<s:Group id="controls" left="0" right="0" bottom="5" >
+		<s:ToggleButton id="micButton" right="5" bottom="0" skinClass="com.andrievsky.videoconference.view.common.skins.buttons.MicButtonSkin" />
+		<s:ToggleButton id="cameraButton" right="30" bottom="0" skinClass="com.andrievsky.videoconference.view.common.skins.CameraButtonSkin" />
+		<!--
+		<s:Image id="fullscreenButton" right="15" bottom="9" source="@Embed('assets/graphics/video-fullscreen-on.png')" />
+		<s:Image right="80" bottom="8" source="@Embed('assets/graphics/video-camera-on.png')"/>
+		<s:Image right="129" bottom="8" source="@Embed('assets/graphics/video-desctop-off.png')"/>
+		<s:Image left="10" bottom="9" source="@Embed('assets/graphics/video-sound-on.png')"/>
+		
+		<volumeslider1:VolumeSlider id="volumeSlider" left="50" bottom="13" maximum="1" minimum="0"
+								   stepSize="0.05" value="1" alpha="0"/>
+		-->
+	</s:Group>
+
+</s:Skin>

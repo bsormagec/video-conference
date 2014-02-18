@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx" xmlns:chat="com.andrievsky.videoconference.view.common.chat.*"
+					  minWidth="830" minHeight="100"
+					  >
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<s:TabBar height="44" left="10" right="10" top="0" skinClass="com.andrievsky.videoconference.view.common.skins.TabBarSkin">
+		<s:layout>
+			<s:HorizontalLayout gap="10"/>
+		</s:layout>
+		<s:dataProvider>
+			<s:ArrayList source="[Chat, Notes, Board, Documents]" />
+		</s:dataProvider>
+	</s:TabBar>
+	<s:Group width="100%" top="34" bottom="0">
+		<chat:ChatView/>
+	</s:Group>
+</s:Group>

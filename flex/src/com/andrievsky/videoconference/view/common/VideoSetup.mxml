@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Group xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			   xmlns:s="library://ns.adobe.com/flex/spark" 
+			   xmlns:mx="library://ns.adobe.com/flex/mx" width="210" height="280"
+			   >
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<fx:Script>
+		<![CDATA[
+			import mx.core.Application;
+			import mx.core.FlexGlobals;
+			import mx.core.IFlexDisplayObject;
+			import mx.events.CloseEvent;
+			import mx.managers.PopUpManager;
+			
+			private function updateCameraMode():void
+			{
+				var camera:Camera = Camera.getCamera();
+				camera.setMode(camsetupVideoWidth.value, camsetupVideoHeight.value, camsetupVideoFPS.value);
+			}
+			
+			private function updateCameraQuality():void
+			{
+				var camera:Camera = Camera.getCamera();
+				camera.setQuality(camsetupVideoBandwidth.value, camsetupVideoQuality.value);
+			}
+		]]>
+	</fx:Script>
+	<s:Label top="10" left="10" text="Camera Setup" />
+	<s:CheckBox enabled="false" left="10" top="40" label="Enable Camera"
+				change="(event.target as CheckBox).selected ? FlexGlobals.topLevelApplication._outgoingStream.attachCamera(Camera.getCamera()) : FlexGlobals.topLevelApplication._outgoingStream.attachCamera(null);"
+				selected="true"/>
+	<s:Button y="150" left="10" label="Update Mode" click="updateCameraMode();"/>
+	<s:Label y="99" left="10" text="Height:"/>
+	<s:HSlider id="camsetupVideoHeight" y="101" left="100" maximum="600" minimum="50" value="360"/>
+	<s:Label y="119" left="10" text="FPS:"/>
+	<s:HSlider id="camsetupVideoFPS" y="120" left="100" maximum="100" minimum="1" value="24"/>
+	<s:Label y="221" left="10" text="Quality:"/>
+	<s:HSlider id="camsetupVideoQuality" y="221" left="100" maximum="100" minimum="0" stepSize="1"
+			   value="100"/>
+	<s:Button y="250" left="10" label="Update Quality" click="updateCameraQuality();"/>
+	<s:Label y="201" left="10" text="Bandwidth (b/s):"/>
+	<s:HSlider id="camsetupVideoBandwidth" y="201" left="100" maximum="1000000" minimum="0"
+			   stepSize="1" value="500000"/>
+	<s:Label y="79" left="10" text="Width:"/>
+	<s:HSlider id="camsetupVideoWidth" y="78" left="100" maximum="800" minimum="50" value="480"/>
+</s:Group>

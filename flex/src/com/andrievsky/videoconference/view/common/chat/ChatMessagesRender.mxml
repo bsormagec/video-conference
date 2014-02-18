@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:RichEditableText xmlns:fx="http://ns.adobe.com/mxml/2009" 
+			xmlns:s="library://ns.adobe.com/flex/spark" 
+			xmlns:mx="library://ns.adobe.com/flex/mx" 
+			editable="false"
+			selectable="true"
+			width="100%" height="100%"
+			minHeight="0" 
+			creationComplete="creationCompleteHandler(event)"
+			>
+	<fx:Script>
+		<![CDATA[
+			import flashx.textLayout.conversion.ConversionType;
+			import flashx.textLayout.conversion.TextConverter;
+			import flashx.textLayout.elements.BreakElement;
+			import flashx.textLayout.elements.DivElement;
+			import flashx.textLayout.elements.FlowElement;
+			import flashx.textLayout.elements.InlineGraphicElement;
+			import flashx.textLayout.elements.LinkElement;
+			import flashx.textLayout.elements.ParagraphElement;
+			import flashx.textLayout.elements.SpanElement;
+			import flashx.textLayout.elements.TextFlow;
+			import flashx.textLayout.events.UpdateCompleteEvent;
+			
+			import mx.collections.ArrayCollection;
+			import mx.events.CollectionEvent;
+			import mx.events.FlexEvent;
+			
+			
+			public var _dataProvider:ArrayCollection;
+			
+			[Bindable]
+			public var itemRenderer:IFactory;
+			
+			private var flowContent:TextFlow;
+			
+			// Needs for custom scroll update
+			private var _contentHeight:Number;
+			private var isReady:Boolean = false;
+			private var oldSearchResult:int = 0;
+			private var oldSearchPattern:String;;
+			
+			
+			private const linkPattern:RegExp = /\b((?:https?:\/\/|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}\/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:'".,<>?«»“”‘’]))/ig;
+			
+			public function set dataProvider(source:ArrayCollection):void
+			{
+				if (_dataProvider) _dataProvider.removeEventListener(CollectionEvent.COLLECTION_CHANGE, updateList);
+				_dataProvider = source;
+				_dataProvider.addEventListener(CollectionEvent.COLLECTION_CHANGE, updateList);
+				if (isReady) createItemRenderers();
+			}
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				addEventListener(UpdateCompleteEvent.UPDATE_COMPLETE, updateHandler);
+				isReady = true;
+				if (_dataProvider) createItemRenderers(); 
+			}
+			
+			private function updateList(event:CollectionEvent):void
+			{
+				this.textFlow = new TextFlow();
+				createItemRenderers();
+			}
+			
+			public function select(source:String):void
+			{
+				var truncatedText : String = (TextConverter.export(textFlow, TextConverter.PLAIN_TEXT_FORMAT, ConversionType.STRING_TYPE) as String).substring(oldSearchResult);
+				var searchResult:int = truncatedText.search(source);
+				setFocus();
+				//selectRange(searchResult, searchResult + source.length);
+				//scrollToRange(searchResult, searchResult + source.length);
+				//return;
+				// when you select the range, you want to offset your result index w/ the characters your chopped off  
+				if(searchResult != -1)
+				{
+					selectRange(oldSearchResult + searchResult, oldSearchResult + searchResult + source.length);
+					scrollToRange(oldSearchResult + searchResult, oldSearchResult + searchResult + source.length);
+					oldSearchResult = oldSearchResult + searchResult + source.length;
+				} 
+				else 
+				{
+					if (oldSearchResult != 0)
+					{
+						oldSearchResult = 0;
+						select(source);
+					}
+				}
+			}
+			
+			public function unselect():void
+			{
+				
+			}
+			
+			private function createItemRenderers():void
+			{
+				//clearList();
+				//createSeparator(new Date());
+				var prevItemDate:Date;
+				var currentItemDate:Date;
+				var itemData:Object;
+				var prevData:Object;
+				var isNewDate:Boolean = false;
+				const length:uint = (_dataProvider) ? _dataProvider.length : 0;
+				for (var i:uint = 0; i < length; i++)
+				{
+					itemData = _dataProvider.getItemAt(i);
+					currentItemDate = itemData.timeStamp as Date;
+					this.textFlow.addChild(createMessaage(itemData.userName, itemData.content));
+					//textFlow.flowComposer.updateAllControllers();
+					
+					prevItemDate = currentItemDate;
+					prevData = itemData;
+				}
+				
+				//invalidateSize();
+				//invalidateParentSizeAndDisplayList();
+			}
+			
+			private function createMessaage(userName:String, text:String):ParagraphElement
+			{
+				var paragraph:ParagraphElement = new ParagraphElement();
+				var content:SpanElement = new SpanElement();
+				var name:SpanElement = new SpanElement();;
+
+				//paragraph.paddingLeft = 10;
+				paragraph.paddingTop = 10;
+				name.text = userName+": ";
+				name.fontWeight="bold";
+				paragraph.addChild(name);
+				content.lineHeight = 5;
+				content.text = text;
+				addContent(paragraph, text);
+				return paragraph;
+				
+			}
+			
+			private function addContent(parent:ParagraphElement, source:String):void
+			{
+				var result:Array = source.split(linkPattern);
+				var smiles:Array;
+				var content:SpanElement;
+				var link:LinkElement;
+				var linkSpan:SpanElement;
+				var image:InlineGraphicElement;
+				for each(var value:String in result)
+				{
+					if (value)
+					{
+						if (linkPattern.test(value))
+						{
+							link = new LinkElement();
+							link.href = (value.indexOf('http://') == -1) ? value.replace('www.', 'http://') : value;
+							link.target = "_blank"
+							linkSpan = new SpanElement();
+							linkSpan.text = value;
+							link.addChild(linkSpan);
+							parent.addChild(link);
+						}
+						else
+						{
+							content = new SpanElement();
+							content.text = value;
+							parent.addChild(content);	
+						}
+					}
+					
+				}
+			}
+			
+			
+			/***
+			 * Custom scroll update event. Regular Scroller updateComplete does not works correct
+			 */
+			private function updateHandler(event:Event):void
+			{
+				if (contentHeight != _contentHeight)
+				{
+					this.dispatchEvent(new Event("updateScroll"));
+					_contentHeight = contentHeight;
+				}
+			}
+		]]>
+	</fx:Script> 
+	<fx:Metadata>
+		[Event(name="updateScroll", type="flash.events.Event")]
+	</fx:Metadata>
+	<fx:Declarations>
+		<s:DateTimeFormatter id="dateFormatter" dateTimePattern="dd MMMM" errorText="Invalid input value" />
+	</fx:Declarations>
+</s:RichEditableText>

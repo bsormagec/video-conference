@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SparkSkin xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:s="library://ns.adobe.com/flex/spark" 
+			 xmlns:fb="http://ns.adobe.com/flashbuilder/2009" alpha.disabled=".5" creationComplete="creationCompleteHandler(event)"> 
+	
+	<!-- host component -->
+	<fx:Metadata>
+		/** 
+		* @copy spark.skins.spark.ApplicationSkin#hostComponent
+		*/
+		[HostComponent("spark.components.mediaClasses.VolumeBar")]
+	</fx:Metadata>
+
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			import spark.primitives.Rect;
+			protected function changeHandler(event:Event):void
+			{
+				if(track && indicator) indicator.height = (hostComponent.muted) ? 0 : hostComponent.value*track.height;
+			}
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				hostComponent.addEventListener(Event.CHANGE, changeHandler);
+				hostComponent.addEventListener(FlexEvent.MUTED_CHANGE, changeHandler);
+				//changeHandler(null);
+				//popup.addEventListener("popUpChanged", changeHandler);
+			}
+			
+		]]>
+	</fx:Script>
+	<s:states>
+		<s:State name="normal" />
+		<s:State name="open" />
+		<s:State name="disabled" />
+	</s:states>
+	
+	
+	
+	<!--- The PopUpAnchor control that contains the drop-down slider control. -->
+	<s:PopUpAnchor id="popup"  displayPopUp.normal="false" displayPopUp.open="true" includeIn="open"
+				   left="0" right="0" top="0" bottom="0" popUpPosition="above" itemDestructionPolicy="auto" updateComplete="changeHandler(event)"  >
+		
+		<!--- @copy spark.components.mediaClasses.VolumeBar#dropDown -->
+		<s:Group id="dropDown" width="19" height="84" horizontalCenter="0">
+			
+			<!-- dropshadow for the dropdown -->
+			<s:Rect left="0" top="0" right="0" bottom="0">
+				<s:filters>
+					<s:DropShadowFilter knockout="true" blurX="20" blurY="20" alpha="0.32" distance="11" angle="90" />   
+				</s:filters>    
+				<s:fill>    
+					<s:SolidColor color="0x000000" />   
+				</s:fill>   
+			</s:Rect>
+			
+			<!-- background for the popup -->
+			<s:Rect left="0" right="0" top="0" bottom="0">
+				<s:fill>
+					<s:SolidColor color="0x000000" alpha="0.1" />
+				</s:fill>
+			</s:Rect>
+			<!--- The skin pat that defines the drop-down slider track.  -->
+			<s:Button id="track" horizontalCenter="0" top="6" bottom="7" skinClass="com.andrievsky.videoconference.view.common.volumeslider.VolumeBarTrackSkin" />
+			<s:Rect id="indicator" horizontalCenter="0" bottom="7" width="4" radiusX="3" radiusY="3" >
+				<s:fill>
+					<s:SolidColor color="0xff7605"/>
+				</s:fill>
+			</s:Rect>
+			<!--- The skin pat that defines the thumb in the drop-down slider track.  -->
+			<s:Button id="thumb" horizontalCenter="0" width="16" height="5"
+					  skinClass="com.andrievsky.videoconference.view.common.volumeslider.VolumeBarThumbSkin" />
+		</s:Group>
+	</s:PopUpAnchor>
+	
+	<!--- @copy spark.components.mediaClasses.VolumeBar#muteButton -->
+	<s:MuteButton id="muteButton" left="0" right="0" top="0" bottom="0" focusEnabled="false"
+				  skinClass="com.andrievsky.videoconference.view.common.volumeslider.MuteButtonSkin" />
+	
+</s:SparkSkin>

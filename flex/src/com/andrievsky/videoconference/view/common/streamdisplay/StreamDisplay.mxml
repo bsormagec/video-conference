@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:SkinnableContainer xmlns:fx="http://ns.adobe.com/mxml/2009" 
+				xmlns:s="library://ns.adobe.com/flex/spark" 
+				xmlns:mx="library://ns.adobe.com/flex/mx" creationComplete="creationCompleteHandler(event)" 
+				width="100%" minWidth="120" height="100%" minHeight="120" maxWidth="320" maxHeight="240">
+	<fx:Script>
+		<![CDATA[
+			import com.andrievsky.videoconference.view.common.volumeslider.VolumeSlider;
+			
+			import mx.events.FlexEvent;
+			import mx.events.ResizeEvent;
+			
+			import com.andrievsky.videoconference.util.video.VideoUtil;
+			import org.osmf.net.StreamType;
+			
+			import spark.components.Button;
+			import spark.components.Group;
+			import spark.components.HSlider;
+			import spark.components.Image;
+			import spark.components.ToggleButton;
+			import spark.components.mediaClasses.VolumeBar;
+			
+			private var video:Video = new Video();
+			private var stream:NetStream;
+			public static const FULL_SCREEN:String = "StreemDisplay.FULL_SCREEN";
+			public static const MIC_MUTE:String = "StreemDisplay.MIC_MUTE";
+			public static const MIC_UNMUTE:String = "StreemDisplay.MIC_UNMUTE";
+			public static const CAPTURE_SHOW:String = "StreemDisplay.CAPTURE_SHOW";
+			public static const CAPTURE_HIDE:String = "StreemDisplay.CAPTURE_HIDE";
+			private var isHardMute:Boolean = false;
+			public var isMicMuted:Boolean = false;
+			private var inUse:Boolean = false;
+			private var isMuted:Boolean = false;
+			private var volumeLevel:Number = 1;
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				//hideControls();
+				videoContainer.addChild(video);
+				videoContainer.addEventListener(ResizeEvent.RESIZE, resizeHandler);
+				resizeHandler();
+				systemManager.stage.addEventListener(FullScreenEvent.FULL_SCREEN, fullScreenHandler);
+				if (fullscreenButton) fullscreenButton.addEventListener(MouseEvent.CLICK, fullscreenHandler);
+				if (volumeBar) volumeBar.addEventListener(Event.CHANGE, changeVolume);
+				if (volumeBar) volumeBar.addEventListener(FlexEvent.MUTED_CHANGE, changeVolumeMuted);
+				if (micButton) micButton.addEventListener(MouseEvent.CLICK, micHandler);
+				if (cameraButton) cameraButton.addEventListener(MouseEvent.CLICK, cameraHandler);
+				//if (muteButton) muteButton.addEventListener(MouseEvent.CLICK, muteHandler);
+				VideoUtil.mirrorVideo(videoContainer);
+			}
+			
+			private function fullscreenHandler(event:MouseEvent):void
+			{
+				dispatchEvent(new Event(FULL_SCREEN));
+			}
+			
+			private function micHandler(event:MouseEvent):void
+			{
+				if (isMicMuted)
+				{
+					isMicMuted = false;
+					dispatchEvent(new Event(MIC_UNMUTE));
+				}
+				else
+				{
+					isMicMuted = true;
+					dispatchEvent(new Event(MIC_MUTE));
+				}
+				
+			}
+			
+			private function cameraHandler(event:MouseEvent):void
+			{
+				if (cameraButton.selected)
+				{
+					dispatchEvent(new Event(CAPTURE_SHOW));
+				}
+				else
+				{
+					dispatchEvent(new Event(CAPTURE_HIDE));
+				}
+				
+			}
+			/*
+			private function muteHandler(event:MouseEvent):void
+			{
+				if (volumeSlider.muted)
+				{
+					muteVolume();
+				}
+				else
+				{
+					unmuteVolume();
+				}
+				
+			}
+			
+			private function muteVolume():void
+			{
+				volumeLevel = volumeSlider.value;
+				setVolume(0);
+				muteButton.selected = true;
+				isMuted = true;
+			}
+			
+			private function unmuteVolume(value:Number = NaN):void
+			{
+				setVolume((!isNaN(value) ? value : volumeLevel));
+				muteButton.selected = false;
+				isMuted = false;
+			}
+			*/
+			private function resizeHandler(event:Event=null):void
+			{
+				video.height = videoContainer.height;
+				video.width = videoContainer.width;
+			}
+			
+			public function playStream(connection:NetConnection, streamID:String):void
+			{
+				stream = new NetStream(connection);
+				stream.client = this;
+				stream.addEventListener(NetStatusEvent.NET_STATUS , netStatusHandler);
+				stream.play(streamID, StreamType.LIVE);
+				video.attachNetStream(stream);
+				showControls();
+				inUse = true;
+			}
+			
+			public function stop():void
+			{
+				if (!inUse) return;
+				if (stream)
+				{
+					video.attachNetStream(null);
+					stream.close();
+					stream.removeEventListener(NetStatusEvent.NET_STATUS , netStatusHandler);
+					stream = null;
+				}
+				else
+				{
+					video.attachCamera(null);
+				}
+				hideControls();
+				// TODO: Check for memory leak
+				inUse = false;
+			}
+			
+			public function playCamera():void
+			{
+				video.attachCamera(Camera.getCamera());
+				inUse = true;
+				isHardMute = true;
+				showControls();
+			}
+			
+			public function hardMute():void
+			{
+				if(!inUse || !stream) return;
+				setVolume(0);
+				isHardMute = true;
+				volumeBar.visible = false;
+			}
+			
+			public function isPlaing():Boolean
+			{
+				return inUse;
+			}
+			
+			private function netStatusHandler(event:Event):void
+			{
+				event.preventDefault();
+			}
+			
+			private function fullScreenHandler(evt:FullScreenEvent):void {
+				if (evt.fullScreen) {
+					hideControls();
+				} else {
+					showControls();
+				}
+			}
+			
+			private function showControls():void
+			{
+				controls.visible = true;
+			}
+			
+			private function hideControls():void
+			{
+				controls.visible = false;
+			}
+			
+			private function changeVolume(event:Event):void
+			{
+				setVolume(volumeBar.value);
+			}
+			
+			private function changeVolumeMuted(event:FlexEvent):void
+			{
+				setVolume((volumeBar.muted) ? 0 : volumeBar.value);
+			}
+			
+			private function setVolume(value:Number):void
+			{
+				if (!stream) return;
+				var t:SoundTransform = new SoundTransform();
+				t.volume = value;
+				stream.soundTransform = t;
+			}
+			
+			override protected function updateDisplayList(unscaledWidth:Number, unscaledHeight:Number):void
+			{
+				super.updateDisplayList(unscaledWidth, unscaledWidth*0.75);
+				height = unscaledWidth*0.75;
+			}
+			
+			/***
+			 * Skin parts
+			 */
+			[SkinPart(required="true")]
+			public var controls:Group;
+			
+			[SkinPart(required="false")]
+			public var fullscreenButton:Image;
+			
+			[SkinPart(required="false")]
+			public var volumeBar:VolumeBar;
+			
+			[SkinPart(required="false")]
+			public var micButton:ToggleButton;
+			
+			[SkinPart(required="false")]
+			public var cameraButton:ToggleButton;
+			
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
+	<mx:UIComponent id="videoContainer" left="0" top="0" right="0" bottom="0"/>
+</s:SkinnableContainer>

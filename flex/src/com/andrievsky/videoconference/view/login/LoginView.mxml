@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<common:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+					  xmlns:s="library://ns.adobe.com/flex/spark" 
+					  xmlns:mx="library://ns.adobe.com/flex/mx" width="100%" height="100%" xmlns:common="com.andrievsky.videoconference.view.common.*">
+	<fx:Script>
+		<![CDATA[
+			import com.andrievsky.videoconference.model.vo.UserVO;
+			
+			protected function getUserLabel(item:UserVO):String
+			{
+				// TODO Auto-generated method stub
+				return item.userName;
+			}
+			
+		]]>
+	</fx:Script>
+	<fx:Declarations>
+		<s:ArrayCollection id="dataProvider" />
+	</fx:Declarations>
+	<s:List id="userList" labelFunction="getUserLabel" top="130" width="200" height="150" horizontalCenter="0" dataProvider="{dataProvider}"/>
+	<s:Button id="loginButton" top="310" label="Login" horizontalCenter="0"/>
+	<s:Label top="60" fontSize="38" horizontalCenter="0" text="Login"/>
+</common:View>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<local:Controller xmlns:mx="http://www.adobe.com/2006/mxml" layout="absolute"
+	  xmlns:local="*"
+	  height="340" width="550"
+	  backgroundColor="#FFFFFF"
+	  backgroundAlpha="0">
+	<mx:UIComponent width="240" height="180" x="14" y="7" id="videoCameraContainer"/>
+	<mx:UIComponent width="240" height="180" x="291" y="7" id="videoRemoteContainer"/>
+	<mx:TextInput id="publishName" x="53" y="194" width="85"/>
+	<mx:Button label="Publish" id="doPublish" x="143" y="194"  />
+	<mx:TextInput id="subscribeName" x="332" y="194" width="85"/>
+	<mx:Button label="Play" id="doSubscribe" x="422" y="194" />
+	<mx:HBox x="120" y="240" horizontalGap="0">
+		<mx:TextInput id="connectStr" width="266"/>
+		<mx:Spacer width="4"/>
+		<mx:Button label="Connect" id="connectButton" />
+	</mx:HBox>
+	<mx:Text id="playerVersion" x="120" y="264" width="172" color="#747474" fontSize="10"/>
+	<mx:Text id="fpsText" x="6" y="304" width="85"/>
+	<mx:Text id="bufferLenText" x="456" y="304" width="85"/>
+	<mx:Text id="prompt" x="101" y="295" width="347" height="30"/>
+	<mx:Label x="506" y="10" text="v. 3"/>
+</local:Controller>

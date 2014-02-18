@@ -1,0 +1,44 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+@font-face { 
+	src: url("assets/fonts/HelveticaNeueLTStd-Roman.otf"); 
+	fontFamily: fontFamily; 
+	embedAsCFF: false; 
+}
+@font-face { 
+	src: url("assets/fonts/HelveticaNeueLTStd-Roman.otf"); 
+	fontFamily: fontFamilyCFF; 
+	embedAsCFF: true; 
+}
+s|Application {
+	fontFamily: fontFamily;
+}
+s|Label
+{	
+	fontFamily: fontFamilyCFF;
+}
+s|RichEditableText
+{	
+	fontFamily: fontFamilyCFF;
+}
+s|HScrollBar {
+	/*skinClass: ClassReference("com.andrievsky.skillstr.view.common.scrollskin.VScrollBarSkin");*/
+}
+
+s|VScrollBar {
+	skinClass: ClassReference("com.andrievsky.videoconference.view.common.scrollskin.VScrollBarSkin");
+}
+
+mx|HDividedBox
+{
+	dividerColor: #aeaeae;
+	dividerSkin: Embed("assets/graphics/hdivideder-skin.png");
+}
+mx|VDividedBox
+{
+	dividerColor: #aeaeae;
+	dividerSkin: Embed("assets/graphics/hdivideder-skin.png");
+}
+/*
+*/
