@@ -46,10 +46,6 @@ package com.andrievsky.videoconference.model
 		
 		public function get APPLICATION_PATH():String
 		{
-			//return "rtmp://localhost:1935/skillstr";
-			return "rtmp://79.143.186.167:1935/skillstr";
-			//return "rtmp://178.251.109.42:1935/skillstr";
-			//return "rtmp://192.168.0.101:1935/skillstr";
-		}
+			return "rtmp://server:1935/app";		}
 	}
 }
